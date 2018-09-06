@@ -1,0 +1,440 @@
+/*
+ * Copyright (c) 2007, 2018 Oracle and/or its affiliates. All rights reserved.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Distribution License v. 1.0, which is available at
+ * http://www.eclipse.org/org/documents/edl-v10.php.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+package org.glassfish.gmbal.impl;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.WeakHashMap;
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
+import java.security.PrivilegedExceptionAction;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedAction;
+import org.glassfish.external.amx.AMX;
+import org.glassfish.gmbal.GmbalMBean;
+import org.glassfish.gmbal.impl.trace.TraceRegistration;
+import org.glassfish.pfl.basic.facet.FacetAccessor;
+import org.glassfish.pfl.tf.spi.annotation.InfoMethod;
+
+/** Represents the collection of DynamicMBeanImpls that we have registered with
+ * a ManagedObjectManager.
+ *
+ * @author ken
+ */
+@TraceRegistration
+public class MBeanTree {
+    private Object root = null ;
+    private MBeanImpl rootEntity = null ;
+    private Map<Object,MBeanImpl> objectMap ;
+    private Map<ObjectName,Object> objectNameMap ;
+    private String domain ;
+    private ObjectName rootParentName ;
+    private String rootParentPrefix ;
+    private String nullParentsParentPath ;
+    private String typeString ; // What string is used for the type of the 
+                                // type name/value pair?
+    private ManagedObjectManagerInternal mom ;
+    private JMXRegistrationManager jrm ;
+    private boolean suppressReport = false ;
+    
+    private void addToObjectMaps( MBeanImpl mbean ) {
+        ObjectName oname = mbean.objectName() ;
+        for (Object obj : mbean.facets() ) {
+            objectMap.put( obj, mbean ) ;
+        }
+        objectNameMap.put( oname, mbean.target() ) ;
+    }
+    
+    private void removeFromObjectMaps( MBeanImpl mbean ) {
+        ObjectName oname = mbean.objectName() ;
+        for (Object obj : mbean.facets() ) {
+            objectMap.remove( obj ) ;
+        }
+        
+        objectNameMap.remove( oname ) ;
+    }
+
+    public synchronized GmbalMBean setRoot( Object root, String rootName ) {
+        // Now register the root MBean.
+        MBeanImpl rootMB = mom.constructMBean( null, root, rootName ) ;
+
+        ObjectName oname ;
+        try {
+            oname = objectName(null, rootMB.type(), rootMB.name());
+        } catch (MalformedObjectNameException ex) {
+            throw Exceptions.self.noRootObjectName(ex) ;
+        }
+        rootMB.objectName( oname ) ;
+
+        addToObjectMaps( rootMB ) ;
+        this.root = root ;
+        rootEntity = rootMB ;
+        boolean success = false ;
+
+        try {
+            // Fix bug#16680733
+            if (System.getSecurityManager() == null) {
+                jrm.setRoot( rootMB )  ;
+            } else {
+                final MBeanImpl _rootMB = rootMB ;
+                AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                    public Object run() throws InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException  {
+                        jrm.setRoot( _rootMB ) ;
+                        return null ;
+                    }
+                });
+            }
+            success = true ;
+        } catch (InstanceAlreadyExistsException ex) {
+            if (suppressReport) {
+                return null;
+            } else {
+                throw Exceptions.self.rootRegisterFail(ex, oname);
+            }
+        } catch (Exception ex) {
+            throw Exceptions.self.rootRegisterFail( ex, oname ) ;
+        } finally {
+            if (!success) {
+                removeFromObjectMaps(rootMB);
+                this.root = null ;
+                rootEntity = null ;
+            }
+        }
+
+        return rootMB ;
+    }
+    public synchronized Object getRoot() {
+        return root ;
+    }
+
+    private String parentPath( final ObjectName rootParentName ) {
+        final String pp = rootParentName.getKeyProperty( AMX.PARENT_PATH_KEY ) ;
+        final String type = rootParentName.getKeyProperty( AMX.TYPE_KEY ) ;
+        final String name = rootParentName.getKeyProperty( AMX.NAME_KEY ) ;
+
+        if (pp == null) {
+            throw Exceptions.self.ppNullInRootParent() ;
+        }
+
+        if (type == null) {
+            throw Exceptions.self.typeNullInRootParent() ;
+        }
+
+        String prefix ;
+        if (pp.equals( "/" )) {
+            prefix = pp ;
+        } else {
+            if (pp.endsWith("/" )) {
+                prefix = pp ;
+            } else {
+                prefix = pp + "/" ;
+            }
+        }
+
+        if (name == null) {
+            return prefix + type ;
+        } else {
+            return prefix + type + '[' + name + ']' ;
+        }
+    }
+
+    public MBeanTree( final ManagedObjectManagerInternal mom,
+        final String domain, 
+        final ObjectName rootParentName,
+        final String typeString ) {
+        
+        this.mom = mom ;
+        this.domain = domain ;
+        this.rootParentName = rootParentName ;
+        if (rootParentName == null) {
+            rootParentPrefix = null ;
+            nullParentsParentPath =  AMX.PARENT_PATH_KEY + "=/," ;
+        } else {
+            rootParentPrefix = parentPath( rootParentName ) ;
+            nullParentsParentPath = AMX.PARENT_PATH_KEY + "="
+                + rootParentPrefix + "," ;
+        }
+
+        this.typeString = typeString ;
+        objectMap = new HashMap<Object,MBeanImpl>() ;
+        objectNameMap = new HashMap<ObjectName,Object>() ;
+        jrm = new JMXRegistrationManager( mom, rootParentName ) ;
+    }
+
+    synchronized void suspendRegistration() {
+        jrm.suspendRegistration();
+    }
+
+    synchronized void resumeRegistration() {
+        jrm.resumeRegistration() ;
+    }
+
+    public synchronized FacetAccessor getFacetAccessor(Object obj) {
+        return objectMap.get( obj ) ;
+    }
+    
+    private void checkCorrectRoot( MBeanImpl entity ) {
+        MBeanImpl current = entity ;
+        do {
+            if (current == rootEntity) {
+                return ;
+            }
+            
+            current = current.parent() ;
+        } while (current != null) ;
+        
+        throw Exceptions.self.notPartOfThisTree(entity) ;
+    }
+
+    static String getQuotedName( String name ) {
+        // Adapted from the ObjectName.quote method.
+        // Here we only quote if needed, and save a lot of
+        // extra processing for String.equals or regex.
+
+        // Allow a little extra space for quoting.  buf will re-size
+        // if necessary.
+        final StringBuilder buf = new StringBuilder( name.length() + 10 );
+        buf.append( '"' ) ;
+        final int len = name.length();
+        boolean needsQuotes = false ;
+        for (int i = 0; i < len; i++) {
+            char c = name.charAt(i);
+            switch (c) {
+                case '\n':
+                    c = 'n';
+                    buf.append('\\');
+                    needsQuotes = true ;
+                    break;
+
+                case '\\':
+                case '\"':
+                case '*':
+                case '?':
+                    buf.append('\\');
+                    needsQuotes = true ;
+                    break;
+
+                case ':' :
+                case '=' :
+                case ',' :
+                    needsQuotes = true ;
+                    break ;
+            }
+            buf.append(c);
+        }
+
+        if (needsQuotes) {
+            buf.append('"');
+            return buf.toString();
+        } else {
+            return name ;
+        }
+    }
+
+    private Map<String,String> typePartMap = new WeakHashMap<String,String>() ;
+
+    private synchronized String getTypePart( String type ) {
+        String result = typePartMap.get( type ) ;
+        if (result == null) {
+            StringBuilder sb = new StringBuilder() ;
+            sb.append( typeString ) ;
+            sb.append( "=" ) ;
+            sb.append( getQuotedName( type ) ) ;
+            result = sb.toString() ;
+
+            typePartMap.put( type, result ) ;
+        }
+
+        return result ;
+    }
+
+    @InfoMethod
+    private void describe( String msg, Object data ) {}
+
+    @TraceRegistration
+    public synchronized ObjectName objectName( MBeanImpl parent,
+        String type, String name ) 
+        throws MalformedObjectNameException {
+        ObjectName oname = null ;
+
+        if (parent != null) {
+            checkCorrectRoot( parent ) ;
+        }
+
+        StringBuilder result = new StringBuilder() ;
+
+        result.append( domain ) ;
+        result.append( ":" ) ;
+
+        // pp
+        String ppPart ;
+        if (parent == null) {
+            ppPart = nullParentsParentPath ;
+        } else {
+            ppPart = parent.getParentPathPart( rootParentPrefix ) ;
+        }
+
+        describe( "ppPart", ppPart ) ;
+        result.append( ppPart ) ;
+
+        // type
+        String typePart = getTypePart( type ) ;
+        describe( "typePart", typePart ) ;
+        result.append( typePart ) ;
+
+        // name: this is not a good candidate for caching
+        if (name.length() > 0) {
+            result.append( ',') ;
+            result.append( AMX.NAME_KEY ) ;
+            result.append( "=" ) ;
+            result.append( getQuotedName( name ) ) ;
+        }
+
+        String on = result.toString() ;
+        try {
+            oname = new ObjectName( on ) ;
+        } catch (MalformedObjectNameException exc) {
+            throw Exceptions.self.malformedObjectName(exc, on) ;
+        }
+
+        return oname ;
+    }
+
+    public MBeanImpl getParentEntity( Object parent ) {
+        if (parent == null) {
+            throw Exceptions.self.parentCannotBeNull() ;
+        }
+
+        MBeanImpl parentEntity ;
+
+        parentEntity = objectMap.get( parent ) ;
+        if (parentEntity == null) {
+            throw Exceptions.self.parentNotFound(parent) ;
+        }
+
+        return parentEntity ;
+    }
+
+    @TraceRegistration
+    public synchronized GmbalMBean register(
+        final MBeanImpl parentEntity,
+        final Object obj, 
+        final MBeanImpl mb ) throws InstanceAlreadyExistsException, 
+        MBeanRegistrationException, NotCompliantMBeanException, 
+        MalformedObjectNameException {
+        
+        MBeanImpl oldMB = objectMap.get( obj ) ;
+        if (oldMB != null) {
+            throw Exceptions.self.objectAlreadyRegistered(obj, oldMB) ;
+        }
+
+        ObjectName oname = objectName( parentEntity, mb.type(),
+            mb.name() ) ;
+        mb.objectName( oname ) ;
+
+        Object oldObj = objectNameMap.get( oname ) ;
+        if (oldObj != null) {
+            throw Exceptions.self.objectAlreadyRegistered( obj,
+                objectMap.get( oldObj ) ) ;
+        }
+
+        addToObjectMaps( mb ) ;
+
+        parentEntity.addChild( mb ) ;
+
+        jrm.register( mb ) ;
+
+        return mb ;
+    }
+
+    @TraceRegistration
+    public synchronized void unregister( Object obj ) 
+        throws InstanceNotFoundException, MBeanRegistrationException {
+        if (obj == root) {
+            root = null ;
+            rootEntity = null ;
+        }
+        
+        MBeanImpl mb = objectMap.get( obj ) ;
+        if (mb == null) {
+            throw Exceptions.self.objectNotFound( obj ) ;
+        }
+
+        for (Map<String,MBeanImpl> nameToMBean : mb.children().values() ) {
+            for (MBeanImpl child : nameToMBean.values() ) {
+                unregister( child.target()) ;
+            }
+        }
+
+        removeFromObjectMaps( mb ) ;
+        jrm.unregister( mb ) ;
+        
+        if (mb.parent() != null) {
+            mb.parent().removeChild( mb ) ;
+        }
+    }
+    
+    public synchronized ObjectName getObjectName( Object obj ) {
+        // A user may be looking for the ObjectName of a GmbalMBean that
+        // was returned from a register call.  If that is the case,
+        // obj should be an instance of MBeanImpl, and we can go directly to
+        // the ObjectName.
+        if (obj instanceof MBeanImpl) {
+            return ((MBeanImpl)obj).objectName() ;
+        }
+
+        // obj might be a POJO that was used to create an MBean: the normal case.
+        MBeanImpl result = objectMap.get(obj);
+        if (result != null) {
+            return result.objectName() ;
+        } else {
+            return null ;
+        }
+    }
+    
+    public synchronized Object getObject( ObjectName oname ) {
+        return objectNameMap.get( oname ) ;
+    }
+    
+    public synchronized MBeanImpl getMBeanImpl( Object obj ) {
+        return objectMap.get( obj ) ;
+    }
+    
+    public synchronized void clear(){
+        if (root != null) {
+            try {
+                unregister(root);
+            } catch (InstanceNotFoundException ex) {
+                Exceptions.self.shouldNotHappen( ex ) ;
+            } catch (MBeanRegistrationException ex) {
+                Exceptions.self.shouldNotHappen( ex ) ;
+            }
+        }
+        
+        objectMap.clear() ;
+        objectNameMap.clear() ;
+        rootEntity = null ;
+        jrm.clear() ;
+    }
+
+    public ObjectName getRootParentName() {
+        return rootParentName ;
+    }
+
+    synchronized void setSuppressDuplicateSetRootReport(boolean suppressReport) {
+        this.suppressReport = suppressReport ;
+    }
+}
