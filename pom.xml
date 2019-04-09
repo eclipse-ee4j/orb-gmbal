@@ -21,7 +21,7 @@
 
     <groupId>org.glassfish.gmbal</groupId>
     <artifactId>gmbal</artifactId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.0.1</version>
 
     <description>GlassFish MBean Annotation Library</description>
     <url>https://projects.eclipse.org/projects/ee4j.orb</url>
