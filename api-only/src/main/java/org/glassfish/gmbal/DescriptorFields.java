@@ -52,7 +52,8 @@ import java.lang.annotation.Target;
  * <p>then the resulting {@code Descriptor} will contain the following
  * fields:</p>
  *
- * <table border="2">
+ * <table>
+ * <caption>{@code Descriptor} fields</caption>
  * <tr><th>Name</th><th>Value</th></tr>
  * <tr><td>units</td><td>"bytes"</td></tr>
  * <tr><td>since</td><td>"1.5"</td></tr>
@@ -95,7 +96,7 @@ import java.lang.annotation.Target;
  * immutableInfo}</a> field for an MBean.  The fields from the annotations
  * must be consistent with these fields provided by the implementation.</p>
  *
- * <h4>{@literal @DescriptorFields and @DescriptorKey}</h4>
+ * <h3>{@literal @DescriptorFields and @DescriptorKey}</h3>
  *
  * <p>The DescriptorKey annotation provides
  * another way to use annotations to define Descriptor fields.

@@ -15,7 +15,6 @@ import java.lang.annotation.Target ;
 import java.lang.annotation.ElementType ;
 import java.lang.annotation.Retention ;
 import java.lang.annotation.RetentionPolicy ;
-import sun.font.EAttribute;
 
 /** Flag on a method indicating that the
  *

@@ -24,10 +24,10 @@ import java.lang.annotation.RetentionPolicy ;
  * it is implemented by the methods inherited by the Managed entity. 
  * <p>
  * An example of a use of this is to handle @ManagedData that inherits from
- * Collection<X>, and it is desired to display a read-only attribute containing
+ * {@code Collection<X>}, and it is desired to display a read-only attribute containing
  * the elements of the Collection.  Simple add the annotation
  * <p>
- * @InheritedAttribute( methodName="iterator" )
+ * {@code @InheritedAttribute( methodName="iterator" )}
  * <p>
  * to handle this case.  Note that this only supports read-only attributes.
  */

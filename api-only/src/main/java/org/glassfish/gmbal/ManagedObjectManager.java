@@ -80,7 +80,7 @@ public interface ManagedObjectManager extends Closeable {
     GmbalMBean createRoot() ;
     
     /** Create a root MBean from root, which much have a method with the
-     * @NameValue annotation.
+     * {@literal @}NameValue annotation.
      * One of the createRoot methods must be called before any of the registration
      * methods may be called.
      * Only one call to createRoot is permitted after an ManagedObjectManager
@@ -122,12 +122,11 @@ public interface ManagedObjectManager extends Closeable {
      * <p>
      * The MBeanInfo for the result is actually ModelMBeanInfo, and may contain
      * extra metadata as defined using annotations defined with the 
-     * @DescriptorKey and @DescriptorField meta-annotations.
+     * {@literal @}DescriptorKey and {@literal @}DescriptorField meta-annotations.
      * <p>
      * Must be called after a successful createRoot call.
      * <p>
      * This version of register should not be used to register singletons.
-     * </ol>
      * @param parent The parent object that contains obj.
      * @param obj The managed object we are registering.
      * @param name The name to use for registering this object.
@@ -331,8 +330,8 @@ public interface ManagedObjectManager extends Closeable {
      * <p>
      * May be called at any time.
      *
-     * @param level set to 1 to just see the results of the TypeEvaluator, >1 to
-     * see lots of details.  WARNING: values >1 will result in a large amount
+     * @param level set to 1 to just see the results of the TypeEvaluator, {@literal >}1 to
+     * see lots of details.  WARNING: values {@literal >}1 will result in a large amount
      * of output.
      */
     void setTypelibDebug( int level ) ;
