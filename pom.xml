@@ -162,10 +162,6 @@
                         <Private-Package>
                             org.glassfish.gmbal.util, org.glassfish.gmbal.impl, org.glassfish.gmbal.typelib
                         </Private-Package>
-                        <Import-Package>
-                            org.glassfish.pfl.*;version="[\$(version;=-;\$(@)),\$(version;+;\$(@)))",
-                            *
-                        </Import-Package>
                         <!-- Include-Resource>
 				TODO: Use PFL ExceptionResourceGenerator to automatically generate resource files 
 				under src/main/resources.  See build.xml for sample usage. 
