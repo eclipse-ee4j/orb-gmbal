@@ -81,7 +81,7 @@
     </mailingLists>
 
     <properties>
-        <jdkVersion>1.8</jdkVersion>
+        <jdkVersion>8</jdkVersion>
         <pfl.version>4.1.0</pfl.version>
         <gmbal.commons.version>3.2.2</gmbal.commons.version>
         <legal.doc.source>${project.basedir}/..</legal.doc.source>
@@ -148,16 +148,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
-                    <configuration>
-                        <source>${jdkVersion}</source>
-                        <target>${jdkVersion}</target>
-                    </configuration>
+                    <version>3.8.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>4.2.0</version>
+                    <version>4.2.1</version>
                 </plugin>
                 <!-- override default "built-by" entry, which points to a developer's user id -->
                 <plugin>
@@ -167,10 +163,6 @@
                     <configuration>
                         <archive>
                             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-                            <manifestEntries>
-                                <Built-By>Oracle</Built-By>
-                                <Automatic-Module-Name>gmbal</Automatic-Module-Name>
-                            </manifestEntries>
                         </archive>
                     </configuration>
                 </plugin>
@@ -192,10 +184,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.1.1</version>
                     <configuration>
-                        <detectJavaApiLink>false</detectJavaApiLink>
-                        <detectOfflineLinks>false</detectOfflineLinks>
+                        <release>${jdkVersion}</release>
+                        <sourceFileExcludes>
+                            <sourceFileExclude>module-info.java</sourceFileExclude>
+                        </sourceFileExcludes>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -207,6 +201,38 @@
         </pluginManagement>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>9</release>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>-Xlint:all</arg>
+                                <arg>--add-reads</arg>
+                                <arg>gmbal=ALL-UNNAMED</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>base-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <release>${jdkVersion}</release>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- prevent the site plugin from deploying to the scm url -->
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
@@ -292,7 +318,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
                 <reportSets>
                     <reportSet>
                         <id>javadoc-only</id>

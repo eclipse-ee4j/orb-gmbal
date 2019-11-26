@@ -83,7 +83,7 @@
                         <configuration>
                             <includeArtifactIds>gmbal-api-only</includeArtifactIds>
                             <classifier>sources</classifier>
-                            <excludes>**/pfl/**,META-INF/**</excludes>
+                            <excludes>module-info.*,**/pfl/**,META-INF/**</excludes>
                             <outputDirectory>${project.build.directory}/generated-sources/api</outputDirectory>
                         </configuration>
                     </execution>
