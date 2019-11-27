@@ -37,7 +37,7 @@ public class GenericConstructor<T> {
      * Generally cls is a class that has been generated and loaded, so
      * no compiled code can depend on the class directly.  However, the
      * generated class probably implements some interface T, represented
-     * here by Class<T>.
+     * here by {@code Class<T>}.
      * @param type The expected type of a create call.
      * @param className The name of the class to use for a constructor.
      * @param signature The signature of the desired constructor.

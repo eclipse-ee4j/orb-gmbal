@@ -116,7 +116,7 @@ public class JMXRegistrationManager {
     }
 
     /** Increment the suspended registration count.
-     * All registrations with JMX are suspended while suspendCount > 0.
+     * All registrations with JMX are suspended while suspendCount {@literal >} 0.
      */
     public void suspendRegistration() {
         synchronized (lock) {
@@ -126,7 +126,7 @@ public class JMXRegistrationManager {
 
     /** Decrement the suspended registration count.
      * If the count goes to zero. all registrations that occurred while
-     * suspendCount > 0 are registered with the JMX server, UNLESS
+     * suspendCount {@literal >} 0 are registered with the JMX server, UNLESS
      * isJMXRegistrationEnabled is false, in which case we simply clear the
      * deferredRegistrations list, because all MBean will be registered once the
      * root is available.
@@ -181,7 +181,7 @@ public class JMXRegistrationManager {
      * deferredRegistrations list and mark suspended false.  In any case,
      * we unregister from JMX if JMX registration is enabled.
      * Note that we may call unregister on an unregistered object if 
-     * suspendCount > 0, but that's OK, because MBean.unregister does
+     * suspendCount {@literal >} 0, but that's OK, because MBean.unregister does
      * nothing if mb is not registered.
      * @param mb The MBean to unregister.
      * @throws InstanceNotFoundException
