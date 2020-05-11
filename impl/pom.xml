@@ -16,12 +16,12 @@
     <parent>
         <groupId>org.glassfish.gmbal</groupId>
         <artifactId>gmbal-project</artifactId>
-        <version>4.0.1-SNAPSHOT</version>
+        <version>4.0.2</version>
     </parent>
 
     <groupId>org.glassfish.gmbal</groupId>
     <artifactId>gmbal</artifactId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.0.2</version>
 
     <name>GMBAL (Implementation)</name>
     <description>GlassFish MBean Annotation Library (Implementation)</description>
