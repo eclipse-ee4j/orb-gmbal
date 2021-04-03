@@ -10,33 +10,34 @@
 
 package org.glassfish.gmbal.typelib;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.reflect.Modifier.PUBLIC;
+
 import java.lang.reflect.Field;
-import java.security.PrivilegedActionException;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static java.lang.reflect.Modifier.* ;
-
-import java.lang.reflect.Type ;
 import java.lang.reflect.GenericArrayType ;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.WildcardType ;
 import java.lang.reflect.ParameterizedType ;
+import java.lang.reflect.Type ;
 import java.lang.reflect.TypeVariable ;
+import java.lang.reflect.WildcardType ;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.WeakHashMap;
+
 import javax.management.ObjectName;
+
 import org.glassfish.gmbal.impl.trace.TraceTypelib;
 import org.glassfish.gmbal.impl.trace.TraceTypelibEval;
 import org.glassfish.pfl.basic.algorithm.Algorithms;
@@ -316,11 +317,13 @@ public class TypeEvaluator {
                 Type[] bounds = tv.getBounds() ;
                 if (bounds.length > 0) {
                     if (bounds.length > 1) {
-                        throw Exceptions.self
-                            .multipleUpperBoundsNotSupported( tv ) ;
-                    } else {
-                        type = bounds[0] ;
-                    }
+                        if (!Boolean.valueOf(System.getProperty("org.glassfish.gmbal.no.multipleUpperBoundsException"))) {
+                            throw Exceptions.self
+                                .multipleUpperBoundsNotSupported( tv ) ;
+                        }
+                    } 
+                    
+                    type = bounds[0] ;
                 } else {
                     type = Object.class ;
                 }
@@ -601,8 +604,10 @@ public class TypeEvaluator {
                 List<Type> ub = Arrays.asList( wt.getUpperBounds() ) ;
                 if (ub.size() > 0) {
                     if (ub.size() > 1) {
-                        throw Exceptions.self.multipleUpperBoundsNotSupported(
-                            wt) ;
+                        if (!Boolean.valueOf(System.getProperty("org.glassfish.gmbal.no.multipleUpperBoundsException"))) {
+                            throw Exceptions.self.multipleUpperBoundsNotSupported(
+                                wt) ;
+                        }
                     }
 
                     result = evaluateType( ub.get(0) ) ;
@@ -628,8 +633,10 @@ public class TypeEvaluator {
                     Type[] bounds = tvar.getBounds() ;
                     if (bounds.length > 0) {
                         if (bounds.length > 1) {
-                            throw Exceptions.self
-                                .multipleUpperBoundsNotSupported( tvar ) ;
+                            if (!Boolean.valueOf(System.getProperty("org.glassfish.gmbal.no.multipleUpperBoundsException"))) {
+                                throw Exceptions.self
+                                    .multipleUpperBoundsNotSupported( tvar ) ;
+                            }
                         }
 
                         result = evaluateType( bounds[0] ) ;
