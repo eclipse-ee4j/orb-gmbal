@@ -10,7 +10,6 @@
 
 package org.glassfish.gmbal.typelib;
 
-import static java.lang.Boolean.FALSE;
 import static java.lang.reflect.Modifier.PUBLIC;
 
 import java.lang.reflect.Field;
@@ -55,6 +54,9 @@ import org.glassfish.pfl.tf.spi.annotation.InfoMethod;
 @TraceTypelib
 @TraceTypelibEval
 public class TypeEvaluator {
+    
+    private static final String ORG_GLASSFISH_GMBAL_NO_MULTIPLE_UPPER_BOUNDS_EXCEPTION = "org.glassfish.gmbal.no.multipleUpperBoundsException";
+    
     private TypeEvaluator() {}
 
     private static Map<Class<?>,EvaluatedType> immutableTypes =
@@ -307,6 +309,7 @@ public class TypeEvaluator {
     // (and each instance of Enum MUST evaluate to the same ECD, or we get
     // infinite recursion).
     private static class PartialDefinitions {
+        
         private Map<Pair<Class<?>,List<Type>>,EvaluatedType> table =
             new HashMap<Pair<Class<?>,List<Type>>,EvaluatedType>() ;
 
@@ -317,7 +320,7 @@ public class TypeEvaluator {
                 Type[] bounds = tv.getBounds() ;
                 if (bounds.length > 0) {
                     if (bounds.length > 1) {
-                        if (!Boolean.valueOf(System.getProperty("org.glassfish.gmbal.no.multipleUpperBoundsException"))) {
+                        if (!Boolean.valueOf(System.getProperty(ORG_GLASSFISH_GMBAL_NO_MULTIPLE_UPPER_BOUNDS_EXCEPTION))) {
                             throw Exceptions.self
                                 .multipleUpperBoundsNotSupported( tv ) ;
                         }
@@ -604,7 +607,7 @@ public class TypeEvaluator {
                 List<Type> ub = Arrays.asList( wt.getUpperBounds() ) ;
                 if (ub.size() > 0) {
                     if (ub.size() > 1) {
-                        if (!Boolean.valueOf(System.getProperty("org.glassfish.gmbal.no.multipleUpperBoundsException"))) {
+                        if (!Boolean.valueOf(System.getProperty(ORG_GLASSFISH_GMBAL_NO_MULTIPLE_UPPER_BOUNDS_EXCEPTION))) {
                             throw Exceptions.self.multipleUpperBoundsNotSupported(
                                 wt) ;
                         }
@@ -633,7 +636,7 @@ public class TypeEvaluator {
                     Type[] bounds = tvar.getBounds() ;
                     if (bounds.length > 0) {
                         if (bounds.length > 1) {
-                            if (!Boolean.valueOf(System.getProperty("org.glassfish.gmbal.no.multipleUpperBoundsException"))) {
+                            if (!Boolean.valueOf(System.getProperty(ORG_GLASSFISH_GMBAL_NO_MULTIPLE_UPPER_BOUNDS_EXCEPTION))) {
                                 throw Exceptions.self
                                     .multipleUpperBoundsNotSupported( tvar ) ;
                             }
