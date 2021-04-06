@@ -55,6 +55,18 @@ import org.glassfish.pfl.tf.spi.annotation.InfoMethod;
 @TraceTypelibEval
 public class TypeEvaluator {
     
+    /**
+     * For ORB compatibility with JDK11+ JDKs see https://github.com/eclipse-ee4j/orb-gmbal/issues/22
+     * 
+     * <p>
+     * In short, the ORB references com.sun.corba.ee.spi.orb.ORB, which references com.sun.corba.ee.impl.corba.TypeCodeFactory
+     * which eventually references com.sun.corba.ee.spi.legacy.connection.Connection.getSocket and java.net.Socket.checkPermission(java.net.SocketImpl).
+     * 
+     * <p>
+     * Now SocketImpl contains a method "&lt;S extends SocketImpl & PlatformSocketImpl> S createPlatformSocketImpl", which causes the ORB to crash 
+     * completely. Setting a system property with this string ignores the fact GMBAL doesn't support multiple upper bounds.
+     * 
+     */
     private static final String ORG_GLASSFISH_GMBAL_NO_MULTIPLE_UPPER_BOUNDS_EXCEPTION = "org.glassfish.gmbal.no.multipleUpperBoundsException";
     
     private TypeEvaluator() {}
