@@ -16,13 +16,13 @@
     <parent>
         <groupId>org.glassfish.gmbal</groupId>
         <artifactId>gmbal-project</artifactId>
-        <version>4.0.1-SNAPSHOT</version>
+        <version>4.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.glassfish.gmbal</groupId>
     <artifactId>gmbal-api-only</artifactId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.0.3-SNAPSHOT</version>
 
     <name>GMBAL (API only)</name>
     <description>GlassFish MBean Annotation Library (API only)</description>

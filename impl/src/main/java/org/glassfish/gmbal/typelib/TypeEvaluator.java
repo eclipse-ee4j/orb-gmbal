@@ -10,33 +10,33 @@
 
 package org.glassfish.gmbal.typelib;
 
+import static java.lang.reflect.Modifier.PUBLIC;
+
 import java.lang.reflect.Field;
-import java.security.PrivilegedActionException;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static java.lang.reflect.Modifier.* ;
-
-import java.lang.reflect.Type ;
 import java.lang.reflect.GenericArrayType ;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.WildcardType ;
 import java.lang.reflect.ParameterizedType ;
+import java.lang.reflect.Type ;
 import java.lang.reflect.TypeVariable ;
+import java.lang.reflect.WildcardType ;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.WeakHashMap;
+
 import javax.management.ObjectName;
+
 import org.glassfish.gmbal.impl.trace.TraceTypelib;
 import org.glassfish.gmbal.impl.trace.TraceTypelibEval;
 import org.glassfish.pfl.basic.algorithm.Algorithms;
@@ -54,6 +54,21 @@ import org.glassfish.pfl.tf.spi.annotation.InfoMethod;
 @TraceTypelib
 @TraceTypelibEval
 public class TypeEvaluator {
+    
+    /**
+     * For ORB compatibility with JDK11+ JDKs see https://github.com/eclipse-ee4j/orb-gmbal/issues/22
+     * 
+     * <p>
+     * In short, the ORB references com.sun.corba.ee.spi.orb.ORB, which references com.sun.corba.ee.impl.corba.TypeCodeFactory
+     * which eventually references com.sun.corba.ee.spi.legacy.connection.Connection.getSocket and java.net.Socket.checkPermission(java.net.SocketImpl).
+     * 
+     * <p>
+     * Now SocketImpl contains a method "&lt;S extends SocketImpl & PlatformSocketImpl> S createPlatformSocketImpl", which causes the ORB to crash 
+     * completely. Setting a system property with this string ignores the fact GMBAL doesn't support multiple upper bounds.
+     * 
+     */
+    private static final String ORG_GLASSFISH_GMBAL_NO_MULTIPLE_UPPER_BOUNDS_EXCEPTION = "org.glassfish.gmbal.no.multipleUpperBoundsException";
+    
     private TypeEvaluator() {}
 
     private static Map<Class<?>,EvaluatedType> immutableTypes =
@@ -306,6 +321,7 @@ public class TypeEvaluator {
     // (and each instance of Enum MUST evaluate to the same ECD, or we get
     // infinite recursion).
     private static class PartialDefinitions {
+        
         private Map<Pair<Class<?>,List<Type>>,EvaluatedType> table =
             new HashMap<Pair<Class<?>,List<Type>>,EvaluatedType>() ;
 
@@ -316,11 +332,13 @@ public class TypeEvaluator {
                 Type[] bounds = tv.getBounds() ;
                 if (bounds.length > 0) {
                     if (bounds.length > 1) {
-                        throw Exceptions.self
-                            .multipleUpperBoundsNotSupported( tv ) ;
-                    } else {
-                        type = bounds[0] ;
-                    }
+                        if (!Boolean.valueOf(System.getProperty(ORG_GLASSFISH_GMBAL_NO_MULTIPLE_UPPER_BOUNDS_EXCEPTION))) {
+                            throw Exceptions.self
+                                .multipleUpperBoundsNotSupported( tv ) ;
+                        }
+                    } 
+                    
+                    type = bounds[0] ;
                 } else {
                     type = Object.class ;
                 }
@@ -601,8 +619,10 @@ public class TypeEvaluator {
                 List<Type> ub = Arrays.asList( wt.getUpperBounds() ) ;
                 if (ub.size() > 0) {
                     if (ub.size() > 1) {
-                        throw Exceptions.self.multipleUpperBoundsNotSupported(
-                            wt) ;
+                        if (!Boolean.valueOf(System.getProperty(ORG_GLASSFISH_GMBAL_NO_MULTIPLE_UPPER_BOUNDS_EXCEPTION))) {
+                            throw Exceptions.self.multipleUpperBoundsNotSupported(
+                                wt) ;
+                        }
                     }
 
                     result = evaluateType( ub.get(0) ) ;
@@ -628,8 +648,10 @@ public class TypeEvaluator {
                     Type[] bounds = tvar.getBounds() ;
                     if (bounds.length > 0) {
                         if (bounds.length > 1) {
-                            throw Exceptions.self
-                                .multipleUpperBoundsNotSupported( tvar ) ;
+                            if (!Boolean.valueOf(System.getProperty(ORG_GLASSFISH_GMBAL_NO_MULTIPLE_UPPER_BOUNDS_EXCEPTION))) {
+                                throw Exceptions.self
+                                    .multipleUpperBoundsNotSupported( tvar ) ;
+                            }
                         }
 
                         result = evaluateType( bounds[0] ) ;
