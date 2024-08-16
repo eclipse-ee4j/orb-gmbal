@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2019, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -12,6 +13,5 @@ module gmbal {
     requires java.logging;
     requires transitive org.glassfish.external.management.api;
 
-    exports org.glassfish.gmbal;
-    exports org.glassfish.gmbal.impl.trace;
+    exports org.glassfish.gmbal.impl;
 }
