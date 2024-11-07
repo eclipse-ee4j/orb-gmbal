@@ -84,7 +84,7 @@
 
     <properties>
         <jdkVersion>8</jdkVersion>
-        <pfl.version>4.1.2</pfl.version>
+        <pfl.version>5.0.0</pfl.version>
         <gmbal.commons.version>3.2.3</gmbal.commons.version>
         <legal.doc.source>${project.basedir}/..</legal.doc.source>
     </properties>
