@@ -12,6 +12,6 @@ module gmbal {
     requires java.logging;
     requires transitive org.glassfish.external.management.api;
 
-    exports org.glassfish.gmbal;
+    exports org.glassfish.gmbal.impl;
     exports org.glassfish.gmbal.impl.trace;
 }
