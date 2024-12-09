@@ -42,9 +42,6 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Bundle-Name>${project.name}</Bundle-Name>
-                        <Bundle-Version>${project.version}</Bundle-Version>
-                        <Export-Package>org.glassfish.gmbal,org.glassfish.pfl.tf.timer.spi</Export-Package>
                     </instructions>
                 </configuration>
                 <executions>
@@ -55,8 +52,8 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            <plugin> 
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>

@@ -126,27 +126,21 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                        <Export-Package>org.glassfish.gmbal, org.glassfish.gmbal.impl.trace</Export-Package>
+                        <Private-Package>
+                            org.glassfish.gmbal.util, org.glassfish.gmbal.impl, org.glassfish.gmbal.typelib
+                        </Private-Package>
+                    </instructions>
+                </configuration>
                 <executions>
                     <execution>
                         <id>generate-manifest</id>
                         <goals>
                             <goal>manifest</goal>
                         </goals>
-                        <configuration>
-                            <instructions>
-                                <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                                <Bundle-Name>${project.name}</Bundle-Name>
-                                <Bundle-Version>${project.version}</Bundle-Version>
-                                <Export-Package>org.glassfish.gmbal, org.glassfish.gmbal.impl.trace</Export-Package>
-                                <Private-Package>
-                                    org.glassfish.gmbal.util, org.glassfish.gmbal.impl, org.glassfish.gmbal.typelib
-                                </Private-Package>
-                                <!-- Include-Resource>
-                                        TODO: Use PFL ExceptionResourceGenerator to automatically generate resource files
-                                        under src/main/resources.  See build.xml for sample usage.
-                                </Include-Resource -->
-                            </instructions>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
