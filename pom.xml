@@ -84,7 +84,7 @@
 
     <properties>
         <pfl.version>5.0.0</pfl.version>
-        <gmbal.commons.version>3.2.3</gmbal.commons.version>
+        <gmbal.commons.version>3.3.0-SNAPSHOT</gmbal.commons.version>
         <jdkVersion>11</jdkVersion>
         <legal.doc.source>${project.basedir}/..</legal.doc.source>
     </properties>
