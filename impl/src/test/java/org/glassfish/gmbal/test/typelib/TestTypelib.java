@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2007, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -15,17 +16,23 @@
  * @author Ken Cavanaugh
  */
 
-package org.glassfish.gmbal.typelib ;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+package org.glassfish.gmbal.test.typelib ;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
+import org.glassfish.gmbal.typelib.DeclarationFactory;
+import org.glassfish.gmbal.typelib.EvaluatedClassDeclaration;
+import org.glassfish.gmbal.typelib.EvaluatedMethodDeclaration;
+import org.glassfish.gmbal.typelib.EvaluatedType;
+import org.glassfish.gmbal.typelib.TypeEvaluator;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class TestTypelib extends TestCase {
     private static final boolean VERBOSE = false ;
@@ -246,7 +253,7 @@ public class TestTypelib extends TestCase {
     }
 
     public static class GenericArrayT<T> extends Super<T[]> {
-        static final EvaluatedType expect = 
+        static final EvaluatedType expect =
             DeclarationFactory.egat( EvaluatedType.EOBJECT ) ;
     }
 
@@ -328,6 +335,7 @@ public class TestTypelib extends TestCase {
      */
 
     private static class ClassNameComparator implements Comparator<Class<?>> {
+        @Override
         public int compare(Class<?> a, Class<?> b) {
             return a.getName().compareTo(b.getName());
         }

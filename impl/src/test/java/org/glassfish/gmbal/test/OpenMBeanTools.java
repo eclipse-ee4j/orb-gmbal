@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-package org.glassfish.gmbal;
+package org.glassfish.gmbal.test;
 
 import org.glassfish.pfl.basic.func.UnaryFunction;
 import org.glassfish.pfl.basic.algorithm.Algorithms;

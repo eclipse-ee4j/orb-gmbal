@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2007, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -7,72 +8,62 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+package org.glassfish.gmbal.impl;
 
-package org.glassfish.gmbal.impl ;
-
-import org.glassfish.pfl.tf.timer.spi.ObjectRegistrationManager;
-import org.glassfish.gmbal.impl.trace.TraceRegistrationFine;
-import org.glassfish.pfl.tf.spi.annotation.InfoMethod;
-import org.glassfish.gmbal.impl.trace.TraceRegistration;
-import org.glassfish.pfl.basic.algorithm.DelayedObjectToString;
-import org.glassfish.pfl.basic.algorithm.DumpIgnore;
-import org.glassfish.pfl.basic.algorithm.ObjectUtility;
-import org.glassfish.pfl.basic.func.UnaryFunction;
-import org.glassfish.pfl.basic.algorithm.Algorithms;
-import org.glassfish.pfl.basic.func.UnaryPredicate;
-import org.glassfish.pfl.basic.algorithm.ClassAnalyzer;
-import org.glassfish.pfl.basic.facet.FacetAccessorImpl;
-import org.glassfish.pfl.basic.facet.FacetAccessor;
-import org.glassfish.pfl.basic.contain.Pair;
-import java.util.ResourceBundle ;
-import java.util.Map ;
-import java.util.HashMap ;
-import java.util.WeakHashMap ;
-import java.util.List ;
-import java.util.ArrayList ;
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.management.ManagementFactory;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.WeakHashMap;
 
-import java.io.IOException ;
-import java.io.Serializable;
-
-import java.lang.annotation.Annotation ;
-
-import java.lang.management.ManagementFactory ;
-
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Method;
-
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.Collection;
-import javax.management.MBeanServer ;
-import javax.management.JMException ;
-import javax.management.ObjectName ;
+import javax.management.JMException;
 import javax.management.MBeanAttributeInfo;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 
-import org.glassfish.gmbal.AMXMBeanInterface;
+import org.glassfish.external.amx.AMX;
+import org.glassfish.external.statistics.AverageRangeStatistic;
+import org.glassfish.external.statistics.BoundaryStatistic;
+import org.glassfish.external.statistics.BoundedRangeStatistic;
+import org.glassfish.external.statistics.CountStatistic;
+import org.glassfish.external.statistics.RangeStatistic;
+import org.glassfish.external.statistics.Statistic;
+import org.glassfish.external.statistics.StringStatistic;
+import org.glassfish.external.statistics.TimeStatistic;
 import org.glassfish.gmbal.AMXClient;
-import org.glassfish.gmbal.GmbalMBean ;
-import org.glassfish.gmbal.ManagedObject ;
-import org.glassfish.gmbal.Description ;
-import org.glassfish.gmbal.IncludeSubclass ;
-import org.glassfish.gmbal.InheritedAttribute ;
-import org.glassfish.gmbal.InheritedAttributes ;
+import org.glassfish.gmbal.AMXMBeanInterface;
 import org.glassfish.gmbal.AMXMetadata;
+import org.glassfish.gmbal.Description;
+import org.glassfish.gmbal.GmbalMBean;
+import org.glassfish.gmbal.IncludeSubclass;
+import org.glassfish.gmbal.InheritedAttribute;
+import org.glassfish.gmbal.InheritedAttributes;
 import org.glassfish.gmbal.ManagedAttribute;
-import org.glassfish.gmbal.ManagedObjectManager;
 import org.glassfish.gmbal.ManagedData;
-
+import org.glassfish.gmbal.ManagedObject;
+import org.glassfish.gmbal.ManagedObjectManager;
+import org.glassfish.gmbal.impl.trace.TraceRegistration;
+import org.glassfish.gmbal.impl.trace.TraceRegistrationFine;
 import org.glassfish.gmbal.typelib.EvaluatedClassAnalyzer;
 import org.glassfish.gmbal.typelib.EvaluatedClassDeclaration;
 import org.glassfish.gmbal.typelib.EvaluatedDeclaration;
@@ -80,19 +71,21 @@ import org.glassfish.gmbal.typelib.EvaluatedFieldDeclaration;
 import org.glassfish.gmbal.typelib.EvaluatedMethodDeclaration;
 import org.glassfish.gmbal.typelib.EvaluatedType;
 import org.glassfish.gmbal.typelib.TypeEvaluator;
+import org.glassfish.pfl.basic.algorithm.Algorithms;
+import org.glassfish.pfl.basic.algorithm.ClassAnalyzer;
+import org.glassfish.pfl.basic.algorithm.DelayedObjectToString;
+import org.glassfish.pfl.basic.algorithm.DumpIgnore;
+import org.glassfish.pfl.basic.algorithm.ObjectUtility;
+import org.glassfish.pfl.basic.contain.Pair;
+import org.glassfish.pfl.basic.facet.FacetAccessor;
+import org.glassfish.pfl.basic.facet.FacetAccessorImpl;
+import org.glassfish.pfl.basic.func.UnaryFunction;
+import org.glassfish.pfl.basic.func.UnaryPredicate;
+import org.glassfish.pfl.tf.spi.annotation.InfoMethod;
+import org.glassfish.pfl.tf.timer.spi.ObjectRegistrationManager;
 
-import org.glassfish.external.amx.AMX;
-
-import org.glassfish.external.statistics.AverageRangeStatistic ;
-import org.glassfish.external.statistics.BoundaryStatistic;
-import org.glassfish.external.statistics.BoundedRangeStatistic;
-import org.glassfish.external.statistics.CountStatistic;
-import org.glassfish.external.statistics.RangeStatistic;
-import org.glassfish.external.statistics.Statistic;
-import org.glassfish.external.statistics.TimeStatistic;
-import org.glassfish.external.statistics.StringStatistic;
-
-import static org.glassfish.pfl.basic.algorithm.Algorithms.* ;
+import static org.glassfish.pfl.basic.algorithm.Algorithms.list;
+import static org.glassfish.pfl.basic.algorithm.Algorithms.pair;
 
 /* Implementation notes:
  * XXX Test attribute change notification.
@@ -103,7 +96,7 @@ public class ManagedObjectManagerImpl implements ManagedObjectManagerInternal {
 
     // Used in MBeanSkeleton
     @AMXMetadata
-    static class DefaultAMXMetadataHolder { }
+    public static class DefaultAMXMetadataHolder { }
 
     private static final AMXMetadata DEFAULT_AMX_METADATA =
 	DefaultAMXMetadataHolder.class.getAnnotation(AMXMetadata.class);

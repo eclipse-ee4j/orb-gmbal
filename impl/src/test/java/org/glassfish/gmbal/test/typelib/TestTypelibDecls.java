@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2007, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -15,12 +16,16 @@
  * @author Ken Cavanaugh
  */
 
-package org.glassfish.gmbal.typelib ;
+package org.glassfish.gmbal.test.typelib ;
 
 import java.util.List;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.glassfish.gmbal.typelib.EvaluatedClassDeclaration;
+import org.glassfish.gmbal.typelib.EvaluatedMethodDeclaration;
+import org.glassfish.gmbal.typelib.EvaluatedType;
+import org.glassfish.gmbal.typelib.TypeEvaluator;
 
 public class TestTypelibDecls {
     public static class Prototypes<T extends List<T>> {

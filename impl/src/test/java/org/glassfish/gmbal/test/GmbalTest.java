@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2003, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -8,38 +9,31 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-package org.glassfish.gmbal ;
+package org.glassfish.gmbal.test;
 
-import org.glassfish.pfl.basic.contain.Pair;
-import org.glassfish.pfl.basic.func.UnaryPredicate;
-import org.glassfish.pfl.basic.algorithm.Algorithms;
-import org.glassfish.pfl.basic.func.UnaryFunction;
 import java.io.IOException;
-import java.lang.annotation.Target ;
-import java.lang.annotation.ElementType ;
-import java.lang.annotation.Retention ;
-import java.lang.annotation.RetentionPolicy ;
-import java.lang.annotation.Inherited ;
-
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Array;
-import java.util.Iterator ;
-import java.util.Map ;
-import java.util.HashMap ;
-import java.util.Hashtable ;
-import java.util.ArrayList ;
-import java.util.Arrays ;
-import java.util.List ;
-import java.util.Set ;
-import java.util.HashSet ;
-import java.util.Date ;
-
-
-import java.math.BigInteger ;
-import java.math.BigDecimal ;
-
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.management.Attribute;
 import javax.management.AttributeList;
 import javax.management.AttributeNotFoundException;
@@ -48,36 +42,63 @@ import javax.management.InstanceNotFoundException;
 import javax.management.IntrospectionException;
 import javax.management.MBeanException;
 import javax.management.MBeanInfo;
-import javax.management.MalformedObjectNameException ;
-import javax.management.ObjectName ;
-import javax.management.MBeanServer ;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
 import javax.management.ReflectionException;
 import javax.management.RuntimeOperationsException;
 import javax.management.modelmbean.ModelMBeanInfo;
-import javax.management.openmbean.SimpleType ;
-import javax.management.openmbean.OpenType ;
-import javax.management.openmbean.CompositeData ;
-import javax.management.openmbean.CompositeType ;
-import javax.management.openmbean.TabularType ;
-import javax.management.openmbean.TabularData ;
+import javax.management.openmbean.CompositeData;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.OpenType;
+import javax.management.openmbean.SimpleType;
+import javax.management.openmbean.TabularData;
+import javax.management.openmbean.TabularType;
 
-import org.glassfish.gmbal.impl.TypeConverter ;
-import org.glassfish.gmbal.impl.ManagedObjectManagerInternal ;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.glassfish.external.amx.AMX;
 import org.glassfish.external.statistics.BoundedRangeStatistic;
 import org.glassfish.external.statistics.impl.BoundedRangeStatisticImpl;
+import org.glassfish.gmbal.AMXClient;
+import org.glassfish.gmbal.AMXMBeanInterface;
+import org.glassfish.gmbal.AMXMetadata;
+import org.glassfish.gmbal.Description;
+import org.glassfish.gmbal.DescriptorKey;
+import org.glassfish.gmbal.GmbalException;
+import org.glassfish.gmbal.GmbalMBean;
+import org.glassfish.gmbal.InheritedAttribute;
+import org.glassfish.gmbal.InheritedAttributes;
+import org.glassfish.gmbal.ManagedAttribute;
+import org.glassfish.gmbal.ManagedData;
+import org.glassfish.gmbal.ManagedObject;
+import org.glassfish.gmbal.ManagedObjectManager;
+import org.glassfish.gmbal.ManagedObjectManagerFactory;
+import org.glassfish.gmbal.ManagedOperation;
+import org.glassfish.gmbal.NameValue;
+import org.glassfish.gmbal.impl.ManagedObjectManagerInternal ;
+import org.glassfish.gmbal.impl.TypeConverter ;
+import org.glassfish.gmbal.impl.TypeConverterImpl ;
 import org.glassfish.gmbal.typelib.EvaluatedClassAnalyzer;
 import org.glassfish.gmbal.typelib.EvaluatedClassDeclaration;
 import org.glassfish.gmbal.typelib.EvaluatedMethodDeclaration;
 import org.glassfish.gmbal.typelib.EvaluatedType;
 import org.glassfish.gmbal.typelib.TypeEvaluator;
-import org.glassfish.gmbal.impl.TypeConverterImpl ;
+import org.glassfish.pfl.basic.algorithm.Algorithms;
+import org.glassfish.pfl.basic.contain.Pair;
+import org.glassfish.pfl.basic.func.UnaryFunction;
+import org.glassfish.pfl.basic.func.UnaryPredicate;
 
-import static org.glassfish.gmbal.typelib.EvaluatedType.* ;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+import static org.glassfish.gmbal.typelib.EvaluatedType.EBOOLEAN;
+import static org.glassfish.gmbal.typelib.EvaluatedType.EBYTE;
+import static org.glassfish.gmbal.typelib.EvaluatedType.ECHAR;
+import static org.glassfish.gmbal.typelib.EvaluatedType.EDOUBLE;
+import static org.glassfish.gmbal.typelib.EvaluatedType.EFLOAT;
+import static org.glassfish.gmbal.typelib.EvaluatedType.EINT;
+import static org.glassfish.gmbal.typelib.EvaluatedType.ELONG;
+import static org.glassfish.gmbal.typelib.EvaluatedType.ESHORT;
 
 public class GmbalTest extends TestCase {
     private static final boolean DEBUG = false ;

@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -8,7 +9,10 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-package org.glassfish.gmbal.typelib;
+package org.glassfish.gmbal.test.typelib;
+
+import org.glassfish.gmbal.typelib.EvaluatedType;
+import org.glassfish.gmbal.typelib.TypeEvaluator;
 
 import junit.framework.TestCase;
 
@@ -112,7 +116,7 @@ public class MoreTypeEvalTests extends TestCase {
         EvaluatedType type = TestTypelibDecls.Prototypes.COLOR ;
         // System.out.println( "toString() = " + type.toString() ) ;
         assertEquals(
-            "org.glassfish.gmbal.typelib.TestTypelibDecls$Prototypes$Color",
+            "org.glassfish.gmbal.test.typelib.TestTypelibDecls$Prototypes$Color",
             type.toString() ) ;
     }
 
