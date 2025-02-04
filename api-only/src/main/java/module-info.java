@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2019, 2020 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -8,10 +9,10 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-module gmbal {
+module org.glassfish.gmbal.api {
     requires java.logging;
     requires transitive org.glassfish.external.management.api;
+    requires org.glassfish.pfl.tf;
 
     exports org.glassfish.gmbal;
-    exports org.glassfish.pfl.tf.timer.spi;
 }

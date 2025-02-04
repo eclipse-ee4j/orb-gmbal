@@ -9,14 +9,21 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-module org.glassfish.gmbal.impl {
+module org.glassfish.gmbal.impl.test {
     requires java.logging;
-    requires transitive org.glassfish.external.management.api;
 
     requires org.glassfish.gmbal.api;
+    requires org.glassfish.gmbal.impl;
+
     requires org.glassfish.pfl.basic;
     requires org.glassfish.pfl.tf;
 
-    exports org.glassfish.gmbal.impl;
-    exports org.glassfish.gmbal.typelib;
+    requires junit;
+
+    exports org.glassfish.gmbal.test;
+    exports org.glassfish.gmbal.test.impl;
+    exports org.glassfish.gmbal.test.typelib;
+
+    opens org.glassfish.gmbal.test to org.glassfish.pfl.basic, org.glassfish.gmbal.impl;
+    opens org.glassfish.gmbal.test.impl to org.glassfish.pfl.basic, org.glassfish.gmbal.impl;
 }

@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2008, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -13,23 +14,36 @@
  * and open the template in the editor.
  */
 
-package org.glassfish.gmbal.impl;
+package org.glassfish.gmbal.test.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.OpenType;
 import javax.management.openmbean.SimpleType;
+
 import org.glassfish.gmbal.Description;
 import org.glassfish.gmbal.ManagedAttribute;
 import org.glassfish.gmbal.ManagedData;
+import org.glassfish.gmbal.impl.ManagedObjectManagerInternal;
+import org.glassfish.gmbal.impl.TypeConverter;
 import org.glassfish.gmbal.typelib.EvaluatedType;
 import org.glassfish.gmbal.typelib.TypeEvaluator;
 
-import static org.glassfish.gmbal.OpenMBeanTools.* ;
-import static junit.framework.Assert.* ;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static org.glassfish.gmbal.test.OpenMBeanTools.array;
+import static org.glassfish.gmbal.test.OpenMBeanTools.comp;
+import static org.glassfish.gmbal.test.OpenMBeanTools.compV;
+import static org.glassfish.gmbal.test.OpenMBeanTools.equalTypes;
+import static org.glassfish.gmbal.test.OpenMBeanTools.equalValues;
+import static org.glassfish.gmbal.test.OpenMBeanTools.item;
+import static org.glassfish.gmbal.test.OpenMBeanTools.list;
+import static org.glassfish.gmbal.test.OpenMBeanTools.listO;
+import static org.glassfish.gmbal.test.OpenMBeanTools.mkmap;
 
 /**
  *
@@ -105,7 +119,7 @@ public class TypeConverterTestData {
             assertEquals( et, tc.getDataType() ) ;
 
             assertEquals( isIdentity, tc.isIdentity()) ;
-           
+
             Object mobj = tc.toManagedEntity(data) ;
             assertTrue( equalValues( ovalue, mobj ) );
 
@@ -139,10 +153,11 @@ public class TypeConverterTestData {
         private final int value ;
         private final List<String> list ;
 
-        @ManagedAttribute 
+        @ManagedAttribute
         @Description( VALUE_DESC )
         public int value() { return value ; }
 
+        @Override
         @ManagedAttribute
         @Description( LIST_DESC )
         public List<String> getList() { return list ; }

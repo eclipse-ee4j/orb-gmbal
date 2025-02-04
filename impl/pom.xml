@@ -52,12 +52,11 @@
             <groupId>org.glassfish.gmbal</groupId>
             <artifactId>gmbal-api-only</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
+            <artifactId>hamcrest-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -82,7 +81,7 @@
                         <configuration>
                             <includeArtifactIds>gmbal-api-only</includeArtifactIds>
                             <classifier>sources</classifier>
-                            <excludes>module-info.*,**/pfl/**,META-INF/**</excludes>
+                            <includes>META-INF/*.md</includes>
                             <outputDirectory>${project.build.directory}/generated-sources/api</outputDirectory>
                         </configuration>
                     </execution>
@@ -110,18 +109,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <configuration>
-                            <compilerArgs>
-                                <arg>-Xlint:all</arg>
-                                <arg>--add-reads</arg>
-                                <arg>gmbal=ALL-UNNAMED</arg>
-                            </compilerArgs>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                    </compilerArgs>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -129,10 +121,8 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Export-Package>org.glassfish.gmbal.impl</Export-Package>
-                        <Private-Package>
-                            org.glassfish.gmbal.main, org.glassfish.gmbal.impl.trace, org.glassfish.gmbal.typelib
-                        </Private-Package>
+                        <Export-Package>org.glassfish.gmbal.impl, org.glassfish.gmbal.typelib</Export-Package>
+                        <Private-Package>org.glassfish.gmbal.main, org.glassfish.gmbal.impl.trace</Private-Package>
                     </instructions>
                 </configuration>
                 <executions>

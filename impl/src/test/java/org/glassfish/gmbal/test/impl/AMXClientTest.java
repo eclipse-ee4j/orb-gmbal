@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -8,9 +9,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-package org.glassfish.gmbal.impl;
-
-import junit.framework.TestCase;
+package org.glassfish.gmbal.test.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +36,13 @@ import org.glassfish.gmbal.ManagedObjectManager;
 import org.glassfish.gmbal.ManagedObjectManagerFactory;
 import org.glassfish.gmbal.ManagedOperation;
 import org.glassfish.gmbal.NameValue;
+import org.glassfish.gmbal.impl.DescriptorIntrospector;
+import org.glassfish.gmbal.impl.ManagedObjectManagerImpl;
+import org.glassfish.gmbal.impl.ManagedObjectManagerInternal;
 import org.glassfish.pfl.basic.algorithm.Algorithms;
 import org.glassfish.pfl.basic.contain.Pair;
+
+import junit.framework.TestCase;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContainingInAnyOrder;

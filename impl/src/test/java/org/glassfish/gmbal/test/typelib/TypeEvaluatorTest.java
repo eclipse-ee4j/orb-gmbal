@@ -13,7 +13,7 @@
  * and open the template in the editor.
  */
 
-package org.glassfish.gmbal.typelib;
+package org.glassfish.gmbal.test.typelib;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

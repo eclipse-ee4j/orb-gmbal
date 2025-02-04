@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -8,10 +9,11 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-package org.glassfish.gmbal.typelib;
+package org.glassfish.gmbal.test.typelib;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import org.glassfish.gmbal.typelib.ForceTypelibError;
 
 /**
  *

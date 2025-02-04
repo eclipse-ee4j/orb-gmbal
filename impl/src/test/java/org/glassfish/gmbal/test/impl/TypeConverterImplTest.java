@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2008, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -13,12 +14,15 @@
  * and open the template in the editor.
  */
 
-package org.glassfish.gmbal.impl;
+package org.glassfish.gmbal.test.impl;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import junit.framework.TestCase;
+
 import org.glassfish.gmbal.ManagedObjectManagerFactory;
+import org.glassfish.gmbal.impl.ManagedObjectManagerInternal;
+
+import junit.framework.TestCase;
 
 /**
  *
