@@ -39,7 +39,6 @@ import org.glassfish.gmbal.NameValue;
 import org.glassfish.gmbal.impl.DescriptorIntrospector;
 import org.glassfish.gmbal.impl.ManagedObjectManagerImpl;
 import org.glassfish.gmbal.impl.ManagedObjectManagerInternal;
-import org.glassfish.pfl.basic.algorithm.Algorithms;
 import org.glassfish.pfl.basic.contain.Pair;
 
 import junit.framework.TestCase;
@@ -269,10 +268,6 @@ public class AMXClientTest extends TestCase {
 
     @AMXMetadata
     public interface Dummy {}
-
-    private static final Map<String,Object> AMX_DEFAULTS =
-        Algorithms.getAnnotationValues(
-            Dummy.class.getAnnotation(AMXMetadata.class), false ) ;
 
     /**
      * Test of getMeta method, of class AMXClient.
