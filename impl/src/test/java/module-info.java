@@ -12,6 +12,8 @@
 module org.glassfish.gmbal.impl.test {
     requires java.logging;
 
+    requires org.glassfish.external.management.api;
+
     requires org.glassfish.gmbal.api;
     requires org.glassfish.gmbal.impl;
 

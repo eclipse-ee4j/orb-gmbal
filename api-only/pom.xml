@@ -46,8 +46,6 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Export-Package>org.glassfish.gmbal,org.glassfish.pfl.tf.timer.spi</Export-Package>
-                        <Private-Package>org.glassfish.gmbal.util</Private-Package>
                     </instructions>
                 </configuration>
                 <executions>
