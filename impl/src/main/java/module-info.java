@@ -11,7 +11,8 @@
 
 module org.glassfish.gmbal.impl {
     requires java.logging;
-    requires transitive org.glassfish.external.management.api;
+    requires java.management;
+    requires org.glassfish.external.management.api;
 
     requires org.glassfish.gmbal.api;
     requires org.glassfish.pfl.basic;
@@ -19,4 +20,6 @@ module org.glassfish.gmbal.impl {
 
     exports org.glassfish.gmbal.impl;
     exports org.glassfish.gmbal.typelib;
+
+    provides org.glassfish.gmbal.ManagedObjectManagerService with org.glassfish.gmbal.impl.ManagedObjectManagerServiceImpl;
 }
