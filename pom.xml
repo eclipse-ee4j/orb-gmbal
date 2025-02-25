@@ -23,7 +23,7 @@
 
     <groupId>org.glassfish.gmbal</groupId>
     <artifactId>gmbal-project</artifactId>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>4.1.0</version>
     <packaging>pom</packaging>
 
     <name>GMBAL</name>
