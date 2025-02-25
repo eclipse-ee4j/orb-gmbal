@@ -11,20 +11,14 @@
 
 module org.glassfish.gmbal.impl.test {
     requires java.logging;
-
     requires org.glassfish.external.management.api;
 
-    requires org.glassfish.gmbal.api;
-    requires org.glassfish.gmbal.impl;
+    requires transitive junit;
+    requires transitive org.glassfish.gmbal.impl;
 
-    requires org.glassfish.pfl.basic;
-    requires org.glassfish.pfl.tf;
-
-    requires junit;
-
-    exports org.glassfish.gmbal.test;
-    exports org.glassfish.gmbal.test.impl;
-    exports org.glassfish.gmbal.test.typelib;
+    exports org.glassfish.gmbal.test to junit;
+    exports org.glassfish.gmbal.test.impl to junit;
+    exports org.glassfish.gmbal.test.typelib to junit;
 
     opens org.glassfish.gmbal.test to org.glassfish.pfl.basic, org.glassfish.gmbal.impl;
     opens org.glassfish.gmbal.test.impl to org.glassfish.pfl.basic, org.glassfish.gmbal.impl;

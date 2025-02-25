@@ -12,11 +12,13 @@
 module org.glassfish.gmbal.impl {
     requires java.logging;
     requires java.management;
+
     requires org.glassfish.external.management.api;
 
-    requires org.glassfish.gmbal.api;
-    requires org.glassfish.pfl.basic;
-    requires org.glassfish.pfl.tf;
+    // transitive - return types make it mandatory
+    requires transitive org.glassfish.gmbal.api;
+    requires transitive org.glassfish.pfl.basic;
+    requires transitive org.glassfish.pfl.tf;
 
     exports org.glassfish.gmbal.impl;
     exports org.glassfish.gmbal.typelib;
