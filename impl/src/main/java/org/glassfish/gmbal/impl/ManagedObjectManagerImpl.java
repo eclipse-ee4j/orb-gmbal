@@ -84,7 +84,6 @@ import org.glassfish.pfl.basic.func.UnaryPredicate;
 import org.glassfish.pfl.tf.spi.annotation.InfoMethod;
 import org.glassfish.pfl.tf.timer.spi.ObjectRegistrationManager;
 
-import static org.glassfish.pfl.basic.algorithm.Algorithms.list;
 import static org.glassfish.pfl.basic.algorithm.Algorithms.pair;
 
 /* Implementation notes:
@@ -255,31 +254,16 @@ public class ManagedObjectManagerImpl implements ManagedObjectManagerInternal {
     } )
     public interface DummyStringStatistic extends DummyStatistic { }
 
-    List<Pair<Class,Class>> statsData = list(
-        pair( (Class)DummyStringStatistic.class,
-            (Class)StringStatistic.class ),
-
-        pair( (Class)DummyTimeStatistic.class,
-            (Class)TimeStatistic.class ),
-
-        pair( (Class)DummyStatistic.class,
-            (Class)Statistic.class ),
-
-        pair( (Class)DummyBoundaryStatistic.class,
-            (Class)BoundaryStatistic.class ),
-
-        pair( (Class)DummyBoundedRangeStatistic.class,
-            (Class)BoundedRangeStatistic.class ),
-
-        pair( (Class)DummyCountStatistic.class,
-            (Class)CountStatistic.class ),
-
-        pair( (Class)DummyRangeStatistic.class,
-            (Class)RangeStatistic.class ),
-
-        pair( (Class)DummyAverageRangeStatistic.class,
-            (Class)AverageRangeStatistic.class )
-    ) ;
+    List<Pair<Class, Class>> statsData = List.of(
+        pair((Class) DummyStringStatistic.class, (Class) StringStatistic.class),
+        pair((Class) DummyTimeStatistic.class, (Class) TimeStatistic.class),
+        pair((Class) DummyStatistic.class, (Class) Statistic.class),
+        pair((Class) DummyBoundaryStatistic.class, (Class) BoundaryStatistic.class),
+        pair((Class) DummyBoundedRangeStatistic.class, (Class) BoundedRangeStatistic.class),
+        pair((Class) DummyCountStatistic.class, (Class) CountStatistic.class),
+        pair((Class) DummyRangeStatistic.class, (Class) RangeStatistic.class),
+        pair((Class) DummyAverageRangeStatistic.class, (Class) AverageRangeStatistic.class)
+    );
 
     private void addAnnotationIfNotNull( AnnotatedElement elemement,
         Annotation annotation ) {

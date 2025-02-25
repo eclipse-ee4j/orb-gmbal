@@ -2016,7 +2016,7 @@ public class GmbalTest extends TestCase {
     private static final long BRTEST_START_TIME = System.currentTimeMillis() ;
     private static final long BRTEST_SAMPLE_TIME= BRTEST_START_TIME + 237 ;
 
-    private static final List<Pair<String,Object>> BRTEST_DATA = Algorithms.list(
+    private static final List<Pair<String,Object>> BRTEST_DATA = List.of(
         Algorithms.pair( "current", (Object)BRTEST_CURRENT ),
         Algorithms.pair( "highWaterMark", (Object)BRTEST_HWM ),
         Algorithms.pair( "lowWaterMark", (Object)BRTEST_LWM ),

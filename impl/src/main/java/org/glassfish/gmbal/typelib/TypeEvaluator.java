@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -137,11 +138,8 @@ public class TypeEvaluator {
             final EvaluatedMethodDeclaration toStringEMD =
                 DeclarationFactory.emdecl( objectECD, PUBLIC, stringECD, "toString",
                 emptyETList, toStringMethod ) ;
-            final List<EvaluatedMethodDeclaration> toStringList =
-                Algorithms.list( toStringEMD ) ;
-
-            final List<EvaluatedClassDeclaration> objectList =
-                Algorithms.list( objectECD ) ;
+            final List<EvaluatedMethodDeclaration> toStringList = List.of(toStringEMD);
+            final List<EvaluatedClassDeclaration> objectList = List.of(objectECD);
 
             // Now finalize the definitions of the ECDs
             voidECD.inheritance( objectList ) ;
