@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
+    Copyright (c) 2026 Contributors to the Eclipse Foundation.
     Copyright (c) 2019, 2021 Oracle and/or its affiliates. All rights reserved.
-    Copyright (c) 2023 Contributors to the Eclipse Foundation. All rights reserved.
 
     This program and the accompanying materials are made available under the
     terms of the Eclipse Distribution License v. 1.0, which is available at
@@ -21,9 +21,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.glassfish.gmbal</groupId>
     <artifactId>gmbal-api-only</artifactId>
-
     <name>GMBAL (API only)</name>
     <description>GlassFish MBean Annotation Library (API only)</description>
 
