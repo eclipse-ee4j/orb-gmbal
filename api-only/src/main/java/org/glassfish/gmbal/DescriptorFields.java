@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation.
  * Copyright (c) 2007, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -96,7 +97,7 @@ import java.lang.annotation.Target;
  * immutableInfo}</a> field for an MBean.  The fields from the annotations
  * must be consistent with these fields provided by the implementation.</p>
  *
- * <h3>{@literal @DescriptorFields and @DescriptorKey}</h3>
+ * <h2>{@literal @DescriptorFields and @DescriptorKey}</h2>
  *
  * <p>The DescriptorKey annotation provides
  * another way to use annotations to define Descriptor fields.
