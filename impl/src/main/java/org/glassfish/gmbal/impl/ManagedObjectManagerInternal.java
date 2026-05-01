@@ -12,8 +12,8 @@ package org.glassfish.gmbal.impl ;
 
 import org.glassfish.gmbal.typelib.EvaluatedClassAnalyzer;
 
-import org.glassfish.gmbal.ManagedObjectManager ;
-import org.glassfish.gmbal.InheritedAttribute ;
+import org.glassfish.gmbal.ManagedObjectManager;
+import org.glassfish.gmbal.InheritedAttribute;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;

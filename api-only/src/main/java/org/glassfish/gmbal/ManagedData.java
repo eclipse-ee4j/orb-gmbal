@@ -10,11 +10,11 @@
 
 package org.glassfish.gmbal ;
 
-import java.lang.annotation.Documented ;
-import java.lang.annotation.Target ;
-import java.lang.annotation.ElementType ;
-import java.lang.annotation.Retention ;
-import java.lang.annotation.RetentionPolicy ;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /** This annotation defines CompositeData.   An interface or class annotated as @ManagedData
  * has a corresponding CompositeData instance constructed according to the @ManagedAttribute 

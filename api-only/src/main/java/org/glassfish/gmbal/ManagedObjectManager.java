@@ -10,17 +10,15 @@
 
 package org.glassfish.gmbal ;
 
-import java.util.ResourceBundle ;
+import java.io.Closeable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+import java.util.ResourceBundle;
 
-import java.io.Closeable ;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 
-import java.lang.reflect.AnnotatedElement ;
-import java.lang.annotation.Annotation ;
-
-import javax.management.ObjectName ;
-import javax.management.MBeanServer ;
-
-import org.glassfish.pfl.tf.timer.spi.ObjectRegistrationManager ;
+import org.glassfish.pfl.tf.timer.spi.ObjectRegistrationManager;
 
 /** An interface used to managed Open MBeans created from annotated
  * objects.  This is mostly a facade over MBeanServer.

@@ -10,11 +10,11 @@
 
 package org.glassfish.gmbal ;
 
-import java.lang.annotation.Documented ;
-import java.lang.annotation.Target ;
-import java.lang.annotation.ElementType ;
-import java.lang.annotation.Retention ;
-import java.lang.annotation.RetentionPolicy ;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /** This annotation is applied to a method that takes no arguments and returns a value
  * that is converted into a String for use in the ObjectName when an instance of the enclosing

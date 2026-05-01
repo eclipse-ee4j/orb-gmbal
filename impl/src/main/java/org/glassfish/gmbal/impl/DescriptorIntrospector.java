@@ -22,8 +22,8 @@ import java.util.Map;
 import javax.management.Descriptor;
 
 
-import org.glassfish.gmbal.DescriptorKey ;
-import org.glassfish.gmbal.DescriptorFields ;
+import org.glassfish.gmbal.DescriptorKey;
+import org.glassfish.gmbal.DescriptorFields;
 
 /**
  * This class contains the methods for performing all the tests needed to verify

@@ -10,9 +10,9 @@
 
 package org.glassfish.gmbal.typelib ;
 
-import java.util.Collections ;
-import java.util.List ;
-import java.util.ArrayList ;
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.glassfish.pfl.basic.algorithm.Graph;
 import org.glassfish.pfl.basic.func.UnaryPredicate;

@@ -18,7 +18,7 @@ import java.security.AccessController;
 import java.security.Permission;
 import java.security.PrivilegedAction;
 import java.util.List;
-import javax.management.ReflectionException ;
+import javax.management.ReflectionException;
 
 import javax.management.MBeanException;
 import org.glassfish.gmbal.typelib.EvaluatedAccessibleDeclaration;

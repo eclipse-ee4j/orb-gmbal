@@ -10,7 +10,7 @@
 
 package org.glassfish.gmbal.impl ;
 
-import javax.management.openmbean.OpenType ;
+import javax.management.openmbean.OpenType;
 import org.glassfish.gmbal.typelib.EvaluatedType;
 
 /** A ManagedEntity is one of the pre-defined Open MBean types: SimpleType, ObjectName, 

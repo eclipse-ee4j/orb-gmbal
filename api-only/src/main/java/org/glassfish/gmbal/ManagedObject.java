@@ -10,11 +10,11 @@
 
 package org.glassfish.gmbal ;
 
-import java.lang.annotation.Documented ;
-import java.lang.annotation.Target ;
-import java.lang.annotation.ElementType ;
-import java.lang.annotation.Retention ;
-import java.lang.annotation.RetentionPolicy ;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /** This annotation defines a Managed Object.   An interface or class annotated as ManagedObject
  * has a corresponding open MBean constructed according to the ManagedAttribute and
