@@ -83,7 +83,7 @@
     </mailingLists>
 
     <properties>
-        <pfl.version>5.1.0</pfl.version>
+        <pfl.version>5.1.1</pfl.version>
         <gmbal.commons.version>3.3.0</gmbal.commons.version>
         <maven.compiler.release>11</maven.compiler.release>
         <legal.doc.source>${project.basedir}/..</legal.doc.source>
