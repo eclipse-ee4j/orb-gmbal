@@ -28,22 +28,24 @@
 
     <name>GMBAL</name>
     <description>GlassFish MBean Annotation Library</description>
-    <url>https://projects.eclipse.org/projects/ee4j.orb</url>
-
-    <contributors>
-        <contributor>
-            <name>Russell.Gold</name>
-        </contributor>
-    </contributors>
+    <url>https://projects.eclipse.org/projects/ee4j.glassfish</url>
 
     <developers>
         <developer>
-            <id>yaminikb</id>
-            <name>Yamini K B</name>
-            <organization>Oracle Corporation</organization>
-            <organizationUrl>http://www.oracle.com/</organizationUrl>
+            <id>eclipse-glassfish-dev</id>
+            <name>GlassFish Development Team</name>
+            <email>glassfish-dev@eclipse.org</email>
+            <organization>Eclipse Foundation</organization>
+            <organizationUrl>https://www.eclipse.org</organizationUrl>
+            <url>https://projects.eclipse.org/projects/ee4j.glassfish/who</url>
         </developer>
     </developers>
+    <contributors>
+        <contributor>
+            <name>GihHub Contributors</name>
+            <url>https://github.com/eclipse-ee4j/orb-gmbal/graphs/contributors</url>
+        </contributor>
+    </contributors>
 
     <scm child.scm.connection.inherit.append.path="false" child.scm.developerConnection.inherit.append.path="false" child.scm.url.inherit.append.path="false">
         <connection>scm:git:https://github.com/eclipse-ee4j/orb-gmbal.git</connection>
@@ -74,11 +76,11 @@
 
     <mailingLists>
         <mailingList>
-          <name>ORB mailing list</name>
-          <post>orb-dev@eclipse.org</post>
-          <subscribe>https://dev.eclipse.org/mailman/listinfo/orb-dev</subscribe>
-          <unsubscribe>https://dev.eclipse.org/mailman/listinfo/orb-dev</unsubscribe>
-          <archive>https://dev.eclipse.org/mhonarc/lists/orb-dev</archive>
+          <name>GlassFish Mailing List</name>
+          <post>glassfish-dev@eclipse.org</post>
+          <subscribe>https://dev.eclipse.org/mailman/listinfo/glassfish-dev</subscribe>
+          <unsubscribe>https://dev.eclipse.org/mailman/listinfo/glassfish-dev</unsubscribe>
+          <archive>https://dev.eclipse.org/mhonarc/lists/glassfish-dev</archive>
         </mailingList>
     </mailingLists>
 
